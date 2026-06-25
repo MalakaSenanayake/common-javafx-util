@@ -1,0 +1,45 @@
+/* 
+    Created on : Jun 21, 2016, 3:31:18 PM
+    Author     : Malaka SENANAYAKE
+*/
+/******************************************************************************/
+.dialog-pane{
+    -fx-background-color: #333333;
+}
+.dialog-pane > *.button-bar > *.container{
+    -fx-background-color: #333333;
+}
+.dialog-pane > *.label.content{
+    -fx-font-family: "Segoe UI" ;
+    -fx-font-size: 10pt;
+    -fx-text-fill: white;
+}
+.dialog-pane:header *.header-panel{
+    -fx-background-color:#333333;
+}
+.dialog-pane:header *.header-panel *.label{
+    -fx-font-family: "Segoe UI" ;
+    -fx-font-size: 11pt;
+    -fx-text-fill: white;
+}
+.dialog-pane .button {
+    -fx-padding: 5 22 5 22;   
+    -fx-border-color: #999999;
+    -fx-border-width: 2;
+    -fx-background-radius:3px;
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 11pt;
+    -fx-text-fill: white;
+    -fx-border-radius:3px;
+}
+.dialog-pane .button:hover {
+    -fx-background-color:rgba(244, 244, 244, 0.2);
+    -fx-border-color: white;
+}
+.dialog-pane .button:pressed, .button:default:hover:pressed {
+    -fx-background-color: white;
+    -fx-text-fill:black;
+    -fx-border-color: white;
+}
+/******************************************************************************/

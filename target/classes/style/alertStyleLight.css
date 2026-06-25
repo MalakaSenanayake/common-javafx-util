@@ -1,0 +1,48 @@
+/* 
+    Created on : Jun 21, 2016, 3:31:18 PM
+    Author     : Malaka SENANAYAKE
+*/
+/******************************************************************************/
+.dialog-pane{
+    -fx-background-color: #ffffff;
+}
+.dialog-pane > *.button-bar > *.container{
+    -fx-background-color: #ffffff;
+}
+.dialog-pane > *.label.content{
+    -fx-font-family: "Segoe UI" ;
+    -fx-font-size: 10pt;
+    -fx-text-fill: #000000;
+}
+.dialog-pane:header *.header-panel{
+    -fx-background-color:#ffffff;
+}
+.dialog-pane:header *.header-panel *.label{
+    -fx-font-family: "Segoe UI" ;
+    -fx-font-size: 11pt;
+    -fx-text-fill: #000000;
+}
+.dialog-pane .button {
+    -fx-padding: 5 22 5 22;   
+    -fx-border-color: #9E9E9E;
+    -fx-border-width: 2;
+    -fx-background-radius:3px;
+    -fx-background-color: #ffffff;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 11pt;
+    -fx-text-fill: #9E9E9E;
+    -fx-border-radius:3px;
+}
+.dialog-pane .button:hover {
+    -fx-background-color:#ffffff;
+    -fx-border-color: #616161;
+    -fx-text-fill: #616161;
+    -fx-cursor: hand;
+}
+.dialog-pane .button:pressed, .button:default:hover:pressed {
+    -fx-background-color: #EEEEEE;
+    -fx-text-fill:#9E9E9E;
+    -fx-border-color: #9E9E9E;
+    -fx-cursor: hand;
+}
+/******************************************************************************/

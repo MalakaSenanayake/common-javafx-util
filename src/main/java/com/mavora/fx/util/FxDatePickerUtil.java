@@ -1,124 +1,109 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mavora.fx.util;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
+import com.mavora.util.DateTimeUtil;
 import javafx.scene.control.DatePicker;
 import javafx.util.StringConverter;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 /**
  * @author Malaka SENANAYAKE
  */
-public class FxDatePickerUtil {
-    //------------------------------------------------------------------------------------------------------------------
+public final class FxDatePickerUtil {
 
-    public static void setDate(String date, DatePicker datePicker) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String dates = sdf.format(sdf.parse(date
-            ));
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate localDate = LocalDate.parse(dates, formatter);
-            datePicker.setValue(localDate);
-        } catch (Exception ex) {
-            Print.error(ex.getMessage());
-        }
+    public static final String DATE_PATTERN = "yyyy-MM-dd";
+    public static final java.time.format.DateTimeFormatter DATE_FORMATTER = DateTimeUtil.LOCAL_DATE;
 
+    private FxDatePickerUtil() {
     }
-    //------------------------------------------------------------------------------------------------------------------
 
-    public static boolean isNotEmptyDatePicker(DatePicker datePicker) {
+    public static void configure(DatePicker datePicker) {
         if (datePicker == null) {
-            FxAlertsUtil.waningMessage("Date picker is not initialized");
-            return false;
-        }
-
-        // Check if value is null (no date selected)
-        if (datePicker.getValue() == null) {
-            FxAlertsUtil.waningMessage("Please select a date");
-            return false;
-        }
-
-        // Check if date picker is editable and text field is empty or invalid
-        if (datePicker.isEditable()) {
-            String text = datePicker.getEditor().getText();
-            if (text == null || text.trim().isEmpty()) {
-                FxAlertsUtil.waningMessage("Please enter a valid date");
-                return false;
-            }
-        }
-        return true;
-    }
-    //------------------------------------------------------------------------------------------------------------------
-
-    public static void toFormatWithToday(DatePicker datePicker) {
-        final String pattern = "yyyy-MM-dd";
-        datePicker.setValue(LocalDate.now());
-        datePicker.setPromptText(pattern.toLowerCase());
-        datePicker.setConverter(new StringConverter<LocalDate>() {
-            final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
-
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
-                }
-            }
-
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
-        });
-    }
-    //------------------------------------------------------------------------------------------------------------------
-
-    public static void toFormat(DatePicker datePicker) {
-        final String pattern = "yyyy-MM-dd";
-        datePicker.setPromptText(pattern.toLowerCase());
-        datePicker.setConverter(new StringConverter<LocalDate>() {
-            final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
-
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
-                }
-            }
-
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
-        });
-    }
-    //------------------------------------------------------------------------------------------------------------------
-    public static void setDatePlusGivenMonths(DatePicker sourceDatePicker, DatePicker targetDatePicker,int month) {
-        if (sourceDatePicker.getValue() == null) {
-            targetDatePicker.setValue(null);
             return;
         }
-        LocalDate selectedDate = sourceDatePicker.getValue();
-        LocalDate calculatedDate = selectedDate.plusMonths(month);
-        targetDatePicker.setValue(calculatedDate);
+        datePicker.setPromptText(DATE_PATTERN);
+        datePicker.setConverter(createConverter());
     }
-    //------------------------------------------------------------------------------------------------------------------
+
+    public static void configureWithToday(DatePicker datePicker) {
+        configure(datePicker);
+        datePicker.setValue(DateTimeUtil.today());
+    }
+
+    public static void setToday(DatePicker datePicker) {
+        if (datePicker != null) {
+            datePicker.setValue(DateTimeUtil.today());
+        }
+    }
+
+    public static void configureAll(DatePicker... datePickers) {
+        if (datePickers == null) {
+            return;
+        }
+        for (DatePicker datePicker : datePickers) {
+            configure(datePicker);
+        }
+    }
+
+    public static void configureAllWithToday(DatePicker... datePickers) {
+        if (datePickers == null) {
+            return;
+        }
+        for (DatePicker datePicker : datePickers) {
+            configureWithToday(datePicker);
+        }
+    }
+
+    public static void configureAllWithRangeDays(DatePicker fromDatePicker, DatePicker toDatePicker, int daysBack) {
+        configureAll(fromDatePicker, toDatePicker);
+        applyRangeDays(fromDatePicker, toDatePicker, daysBack);
+    }
+
+    public static void configureAllWithRangeMonths(DatePicker fromDatePicker, DatePicker toDatePicker, int monthsBack) {
+        configureAll(fromDatePicker, toDatePicker);
+        applyRangeMonths(fromDatePicker, toDatePicker, monthsBack);
+    }
+
+    private static void applyRangeDays(DatePicker fromDatePicker, DatePicker toDatePicker, int daysBack) {
+        if (fromDatePicker == null || toDatePicker == null) {
+            return;
+        }
+        LocalDate today = DateTimeUtil.today();
+        fromDatePicker.setValue(DateTimeUtil.todayMinusDays(daysBack));
+        toDatePicker.setValue(today);
+    }
+
+    private static void applyRangeMonths(DatePicker fromDatePicker, DatePicker toDatePicker, int monthsBack) {
+        if (fromDatePicker == null || toDatePicker == null) {
+            return;
+        }
+        LocalDate today = DateTimeUtil.today();
+        fromDatePicker.setValue(DateTimeUtil.todayMinusMonths(monthsBack));
+        toDatePicker.setValue(today);
+    }
+
+    private static StringConverter<LocalDate> createConverter() {
+        return new StringConverter<LocalDate>() {
+            @Override
+            public String toString(LocalDate date) {
+                if (date == null) {
+                    return "";
+                }
+                return DATE_FORMATTER.format(date);
+            }
+
+            @Override
+            public LocalDate fromString(String value) {
+                if (value == null || value.trim().isEmpty()) {
+                    return null;
+                }
+                try {
+                    return LocalDate.parse(value.trim(), DATE_FORMATTER);
+                } catch (DateTimeParseException ex) {
+                    return null;
+                }
+            }
+        };
+    }
 }
