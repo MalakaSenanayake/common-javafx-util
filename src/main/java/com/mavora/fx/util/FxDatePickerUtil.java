@@ -24,16 +24,19 @@ public final class FxDatePickerUtil {
         }
         datePicker.setPromptText(DATE_PATTERN);
         datePicker.setConverter(createConverter());
+        datePicker.setEditable(false);
     }
 
     public static void configureWithToday(DatePicker datePicker) {
         configure(datePicker);
         datePicker.setValue(DateTimeUtil.today());
+        datePicker.setEditable(false);
     }
 
     public static void setToday(DatePicker datePicker) {
         if (datePicker != null) {
             datePicker.setValue(DateTimeUtil.today());
+            datePicker.setEditable(false);
         }
     }
 
@@ -72,6 +75,8 @@ public final class FxDatePickerUtil {
         LocalDate today = DateTimeUtil.today();
         fromDatePicker.setValue(DateTimeUtil.todayMinusDays(daysBack));
         toDatePicker.setValue(today);
+        fromDatePicker.setEditable(false);
+        toDatePicker.setEditable(false);
     }
 
     private static void applyRangeMonths(DatePicker fromDatePicker, DatePicker toDatePicker, int monthsBack) {
@@ -81,6 +86,8 @@ public final class FxDatePickerUtil {
         LocalDate today = DateTimeUtil.today();
         fromDatePicker.setValue(DateTimeUtil.todayMinusMonths(monthsBack));
         toDatePicker.setValue(today);
+        toDatePicker.setEditable(false);
+        fromDatePicker.setEditable(false);
     }
 
     private static StringConverter<LocalDate> createConverter() {
